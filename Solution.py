@@ -1,25 +1,10 @@
-import nltk
-import re
-import os
-import pandas as pd
-import numpy as np
-import scipy.sparse as sp
-import lightgbm as lgb
-import scipy.sparse as sp
-
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import StratifiedKFold
-from sklearn.decomposition import LatentDirichletAllocation, NMF, TruncatedSVD
-from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn import metrics
-from sklearn.metrics import f1_score
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import roc_auc_score, f1_score, recall_score, precision_score, classification_report
-from urllib.parse import unquote, urlparse, quote
-from sklearn.feature_extraction.text import TfidfVectorizer
-from tqdm import tqdm
-
 import warnings
+
+import lightgbm as lgb
+import numpy as np
+import pandas as pd
+from sklearn.metrics import roc_auc_score, f1_score, recall_score, precision_score
+from sklearn.model_selection import StratifiedKFold
 
 warnings.filterwarnings('ignore')
 
@@ -47,12 +32,11 @@ for i in range(len(com_f)):
         data[f'{com_f[i]}*{com_f[j]}'] = data[com_f[i]] * data[com_f[j]]
         data[f'{com_f[i]}/{com_f[j]}'] = data[com_f[i]] / data[com_f[j]]
 
-
 # 训练测试分离
 train = data[~data['label'].isna()].reset_index(drop=True)
 test = data[data['label'].isna()].reset_index(drop=True)
 
-features = [i for i in train.columns if i not in ['label',  'id']]
+features = [i for i in train.columns if i not in ['label', 'id']]
 y = train['label']
 KF = StratifiedKFold(n_splits=5, random_state=2021, shuffle=True)
 feat_imp_df = pd.DataFrame({'feat': features, 'imp': 0})
@@ -61,11 +45,11 @@ params = {
     'boosting_type': 'gbdt',
     'metric': 'auc',
     'n_jobs': 30,
-    'learning_rate': 0.05,
+    'learning_rate': 0.04,
     'num_leaves': 2 ** 6,
     'max_depth': 8,
     'tree_learner': 'serial',
-    'colsample_bytree': 0.8,
+    'colsample_bytree': 0.82,
     'subsample_freq': 1,
     'subsample': 0.8,
     'num_boost_round': 5000,
