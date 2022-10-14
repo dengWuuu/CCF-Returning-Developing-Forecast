@@ -36,7 +36,7 @@ for df in [train_data, test_data]:
             df[f'{loc_f[i]}*{loc_f[j]}'] = df[loc_f[i]] * df[loc_f[j]]
             df[f'{loc_f[i]}/{loc_f[j]}'] = df[loc_f[i]] / (df[loc_f[j]] + 1)
 
-# 暴力Feature 通话
+# 暴力 Feature 通话
 com_f = ['f43', 'f44', 'f45', 'f46']
 for df in [train_data, test_data]:
     for i in range(len(com_f)):
